@@ -1,0 +1,15 @@
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\bin\Debug\FaceDetection.exe
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\bin\Debug\FaceDetection.pdb
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\bin\Debug\Emgu.CV.dll
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\bin\Debug\Emgu.CV.UI.dll
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\bin\Debug\Emgu.Util.dll
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\bin\Debug\ZedGraph.dll
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\bin\Debug\Emgu.CV.xml
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\bin\Debug\Emgu.CV.UI.xml
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\bin\Debug\Emgu.Util.xml
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\obj\x86\Debug\FaceDetection.csprojResolveAssemblyReference.cache
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\obj\x86\Debug\FaceDetection.FaceDetection.resources
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\obj\x86\Debug\FaceDetection.Properties.Resources.resources
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\obj\x86\Debug\FaceDetection.csproj.GenerateResource.Cache
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\obj\x86\Debug\FaceDetection.exe
+C:\Users\NTL\Downloads\Compressed\FaceDetection\FaceDetection\obj\x86\Debug\FaceDetection.pdb

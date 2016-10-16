@@ -83,41 +83,50 @@ namespace FaceDetection
         {
             Thread t1 = new Thread((ThreadStart) =>
             {
-                for (int l = 0; l < 12; ++l)
+                for (int l = 0; l < 15; l++)
                 {
-                    //Thread.Sleep(1000);
-                    string fil = "TrainYale/face" + (l + 1) + ".bmp";
-                    Image InputImg = Image.FromFile(fil);
-                    ImageFrame = new Image<Bgr, byte>(new Bitmap(InputImg));
-                    //faceImageBox.Image = ImageFrame;
+                    for (int j = 0; j < 11; j++)
+                    {                        
+                        //Thread.Sleep(1000);
+                        //string fil = "TrainYale/face" + (l + 1) + ".bmp";
+                        string fil = "yalefaces/s" + (l + 1).ToString() + "_" + (j + 1).ToString() + ".bmp";
+                        Image InputImg = Image.FromFile(fil);
+                        ImageFrame = new Image<Bgr, byte>(new Bitmap(InputImg));
+                        //faceImageBox.Image = ImageFrame;
 
-                    //Get a gray frame from capture device
-                    gray = ImageFrame.Resize(320, 240, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC).Convert<Gray, byte>();
+                        //Get a gray frame
+                        gray = ImageFrame.Resize(320, 240, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC).Convert<Gray, byte>();
+                        //gray = ImageFrame.Resize(92, 112, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC).Convert<Gray, byte>();
 
-                    //Face Detector
-                    MCvAvgComp[][] facesDetected = gray.DetectHaarCascade(haar, 1.2, 10, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
+                        //Face Detector
+                        //MCvAvgComp[][] facesDetected = gray.DetectHaarCascade(haar, 1.2, 10, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
+                        var faces = gray.DetectHaarCascade(haar, ScaleRate, minNeighbors, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(windowSize, windowSize))[0];
 
-                    //Action for each element detected
-                    foreach (MCvAvgComp f in facesDetected[0])
-                    {
-                        TrainedFace = ImageFrame.Copy(f.rect).Convert<Gray, byte>();
-                        ImageFrame.Draw(f.rect, new Bgr(Color.Blue), 2);
-                        trainingImages.Add(TrainedFace);
-                        labels.Add(textBox1.Text);
-                        break;
-                    }
+                        //Action for each element detected
+                        //foreach (MCvAvgComp f in facesDetected[0])
+                        foreach (var face in faces)
+                        {
+                            TrainedFace = ImageFrame.Copy(face.rect).Convert<Gray, byte>();
+                            ImageFrame.Draw(face.rect, new Bgr(Color.Blue), 2);
+                            trainingImages.Add(TrainedFace);
+                            textBox1.Text = "s" + (l + 1).ToString() + "_" + (j + 1).ToString();
+                            labels.Add(textBox1.Text);
+                            break;
+                        }
 
-                    //Show face added in gray scale
-                    imageBox1.Image = TrainedFace;
+                        //Show face added in gray scale
+                        imageBox1.Image = TrainedFace;
 
-                    //Write the number of triained faces in a file text for further load
-                    File.WriteAllText(Application.StartupPath + "/TrainedFaces/TrainedLabels.txt", trainingImages.ToArray().Length.ToString() + "%");
-                    for (int i = 1; i < trainingImages.ToArray().Length + 1; i++)
-                    {
-                        trainingImages.ToArray()[i - 1].Resize(100, 100, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC).Save(Application.StartupPath + "/TrainedFaces/face" + i + ".bmp");
-                        File.AppendAllText(Application.StartupPath + "/TrainedFaces/TrainedLabels.txt", labels.ToArray()[i - 1] + "%");
+                        //Write the number of triained faces in a file text for further load
+                        File.WriteAllText(Application.StartupPath + "/TrainedFaces/TrainedLabels.txt", trainingImages.ToArray().Length.ToString() + "%");
+                        for (int i = 1; i < trainingImages.ToArray().Length + 1; i++)
+                        {
+                            trainingImages.ToArray()[i - 1].Resize(100, 100, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC).Save(Application.StartupPath + "/TrainedFaces/face" + i + ".bmp");
+                            File.AppendAllText(Application.StartupPath + "/TrainedFaces/TrainedLabels.txt", labels.ToArray()[i - 1] + "%");
+                        }
                     }
                 }
+                MessageBox.Show("all");
             });
             t1.Start();
         }

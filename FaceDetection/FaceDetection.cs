@@ -20,8 +20,6 @@ namespace FaceDetection
     {
         private HaarCascade haar;
 
-        //Bitmap[] ExtFaces;
-        //int FaceNo;
         Image<Bgr, byte> ImageFrame;
         MCvFont font = new MCvFont(FONT.CV_FONT_HERSHEY_TRIPLEX, 0.5d, 0.5d);
         Image<Gray, byte> result, TrainedFace = null;
@@ -75,7 +73,36 @@ namespace FaceDetection
                 Image InputImg = Image.FromFile(openFileDialog1.FileName);
                 ImageFrame = new Image<Bgr, byte>(new Bitmap(InputImg));
                 faceImageBox.Image = ImageFrame.Resize(320, 240, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
+
                 DetectFaces();
+            }
+        }
+
+        private void btn_Prev_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_Next_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        delegate void SetTextCallback(string text);
+
+        private void SetText(string text)
+        {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (this.textBox1.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(SetText);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                this.textBox1.Text = text;
             }
         }
 
@@ -83,33 +110,35 @@ namespace FaceDetection
         {
             Thread t1 = new Thread((ThreadStart) =>
             {
-                for (int l = 0; l < 15; l++)
+                string path = Application.StartupPath + @"\Database";
+                List<string> FileArray = new List<string>();
+                foreach (string s in Directory.GetDirectories(path))
+                {
+                    FileArray.Add(s.Remove(0, s.LastIndexOf('\\') + 1));
+                }
+
+                for (int l = 0; l < FileArray.Count; l++)
                 {
                     for (int j = 0; j < 11; j++)
                     {                        
-                        //Thread.Sleep(1000);
-                        //string fil = "TrainYale/face" + (l + 1) + ".bmp";
-                        string fil = "yalefaces/s" + (l + 1).ToString() + "_" + (j + 1).ToString() + ".bmp";
+                        Thread.Sleep(100);
+                        string fil = path + "/" + FileArray[l] + "/" + FileArray[l] + "." + (j + 1) + ".jpg";
                         Image InputImg = Image.FromFile(fil);
                         ImageFrame = new Image<Bgr, byte>(new Bitmap(InputImg));
-                        //faceImageBox.Image = ImageFrame;
 
                         //Get a gray frame
-                        gray = ImageFrame.Resize(320, 240, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC).Convert<Gray, byte>();
-                        //gray = ImageFrame.Resize(92, 112, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC).Convert<Gray, byte>();
+                        gray = ImageFrame.Convert<Gray, byte>();
 
                         //Face Detector
-                        //MCvAvgComp[][] facesDetected = gray.DetectHaarCascade(haar, 1.2, 10, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
                         var faces = gray.DetectHaarCascade(haar, ScaleRate, minNeighbors, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(windowSize, windowSize))[0];
 
                         //Action for each element detected
-                        //foreach (MCvAvgComp f in facesDetected[0])
                         foreach (var face in faces)
                         {
-                            TrainedFace = ImageFrame.Copy(face.rect).Convert<Gray, byte>();
+                            TrainedFace = ImageFrame.Copy(face.rect).Convert<Gray, byte>().Resize(100, 100, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
                             ImageFrame.Draw(face.rect, new Bgr(Color.Blue), 2);
                             trainingImages.Add(TrainedFace);
-                            textBox1.Text = "s" + (l + 1).ToString() + "_" + (j + 1).ToString();
+                            SetText(FileArray[l].ToString());
                             labels.Add(textBox1.Text);
                             break;
                         }
@@ -126,12 +155,14 @@ namespace FaceDetection
                         }
                     }
                 }
-                MessageBox.Show("all");
+                MessageBox.Show("Training Successfully", "Message");
+                btn_Next.Enabled = btn_Prev.Enabled = true;
+                btnTrain.Enabled = false;
             });
             t1.Start();
-        }
+    }
 
-        private void DetectFaces()
+    private void DetectFaces()
         {
             Image<Gray, byte> grayframe = ImageFrame.Convert<Gray, byte>();
 
@@ -159,13 +190,13 @@ namespace FaceDetection
                 gray = ImageFrame.Convert<Gray, Byte>();
 
                 //Face Detector
-                MCvAvgComp[][] facesDetected = gray.DetectHaarCascade(haar, 1.2, 10, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(20, 20));
+                var faces = gray.DetectHaarCascade(haar, ScaleRate, minNeighbors, Emgu.CV.CvEnum.HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(windowSize, windowSize))[0];
 
                 //Action for each element detected
-                foreach (MCvAvgComp f in facesDetected[0])
+                foreach (var face in faces)
                 {
                     t = t + 1;
-                    result = ImageFrame.Copy(f.rect).Convert<Gray, byte>().Resize(100, 100, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
+                    result = ImageFrame.Copy(face.rect).Convert<Gray, byte>().Resize(100, 100, Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC);
                     //draw the face detected in the 0th (gray) channel with blue color
                     //ImageFrame.Draw(f.rect, new Bgr(Color.Blue), 2);
 
@@ -186,7 +217,9 @@ namespace FaceDetection
                             name = recognizer.Recognize(result);
 
                             //Draw the label for each face detected and recognized
-                            ImageFrame.Draw(name, ref font, new Point(f.rect.X - 2, f.rect.Y - 2), new Bgr(Color.Blue));
+                            //private Font font = new Font("Arial", 12, FontStyle.Bold); //creates new font
+                            
+                            ImageFrame.Draw(name, ref font, new Point(face.rect.X - 2, face.rect.Y - 2), new Bgr(Color.Blue));
 
                         }
                     }

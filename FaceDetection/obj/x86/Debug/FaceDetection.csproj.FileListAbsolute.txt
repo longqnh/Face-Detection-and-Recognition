@@ -27,4 +27,3 @@ C:\Users\NTL\Documents\GitHub\Face-Detection-and-Recognition\FaceDetection\obj\x
 C:\Users\NTL\Documents\GitHub\Face-Detection-and-Recognition\FaceDetection\obj\x86\Debug\FaceDetection.csproj.GenerateResource.Cache
 C:\Users\NTL\Documents\GitHub\Face-Detection-and-Recognition\FaceDetection\obj\x86\Debug\FaceDetection.exe
 C:\Users\NTL\Documents\GitHub\Face-Detection-and-Recognition\FaceDetection\obj\x86\Debug\FaceDetection.pdb
-C:\Users\NTL\Documents\GitHub\Face-Detection-and-Recognition\FaceDetection\obj\x86\Debug\FaceDetection.csprojResolveAssemblyReference.cache

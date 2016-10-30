@@ -37,6 +37,8 @@
             this.btnPicRecog = new System.Windows.Forms.Button();
             this.btnTrain = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.btn_Prev = new System.Windows.Forms.Button();
+            this.btn_Next = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.faceImageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
             this.SuspendLayout();
@@ -113,11 +115,35 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // btn_Prev
+            // 
+            this.btn_Prev.Enabled = false;
+            this.btn_Prev.Location = new System.Drawing.Point(389, 192);
+            this.btn_Prev.Name = "btn_Prev";
+            this.btn_Prev.Size = new System.Drawing.Size(26, 20);
+            this.btn_Prev.TabIndex = 27;
+            this.btn_Prev.Text = "<";
+            this.btn_Prev.UseVisualStyleBackColor = true;
+            this.btn_Prev.Click += new System.EventHandler(this.btn_Prev_Click);
+            // 
+            // btn_Next
+            // 
+            this.btn_Next.Enabled = false;
+            this.btn_Next.Location = new System.Drawing.Point(527, 192);
+            this.btn_Next.Name = "btn_Next";
+            this.btn_Next.Size = new System.Drawing.Size(26, 20);
+            this.btn_Next.TabIndex = 28;
+            this.btn_Next.Text = ">";
+            this.btn_Next.UseVisualStyleBackColor = true;
+            this.btn_Next.Click += new System.EventHandler(this.btn_Next_Click);
+            // 
             // FaceDetection
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(578, 343);
+            this.Controls.Add(this.btn_Next);
+            this.Controls.Add(this.btn_Prev);
             this.Controls.Add(this.btnTrain);
             this.Controls.Add(this.btnPicRecog);
             this.Controls.Add(this.imageBox1);
@@ -146,6 +172,8 @@
         private System.Windows.Forms.Button btnPicRecog;
         private System.Windows.Forms.Button btnTrain;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Button btn_Prev;
+        private System.Windows.Forms.Button btn_Next;
     }
 }
 
